@@ -23,7 +23,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         nav_view.setNavigationItemSelectedListener(this)
         FireStoreClass().loadUserData(this)
         println("This is second commit")
-        adadasdasda.weggweg
+        vvsvsvds
     }
 
     private fun setupActionBar() {
