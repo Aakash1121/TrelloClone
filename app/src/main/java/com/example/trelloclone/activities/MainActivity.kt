@@ -24,7 +24,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         FireStoreClass().loadUserData(this)
         println("This is second commit")
         println("Local change")
-        println("exp1")
+        println("change 1")
 
 
     }
