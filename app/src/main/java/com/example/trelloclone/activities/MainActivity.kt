@@ -22,10 +22,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setupActionBar()
         nav_view.setNavigationItemSelectedListener(this)
         FireStoreClass().loadUserData(this)
-        println("This is second commit")
-        println("Local change")
-        println("change 4")
-        println("youtube 1")
 
 
     }
