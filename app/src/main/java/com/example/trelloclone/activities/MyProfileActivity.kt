@@ -114,7 +114,6 @@ class MyProfileActivity : BaseActivity() {
     fun setUserDataInUI(user: User) {
         Glide.with(this@MyProfileActivity).load(user.image).centerCrop()
             .placeholder(R.drawable.ic_user_place_holder).into(iv_profile_user_image)
-
         et_name.setText(user.name)
         et_email.setText(user.email)
         if (user.mobileNumber != 0L) {
@@ -152,7 +151,7 @@ class MyProfileActivity : BaseActivity() {
         return MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri!!))
     }
 
-    fun profileUpdateSuccess(){
+    fun profileUpdateSuccess() {
         hideProgressDialog()
         finish()
     }
