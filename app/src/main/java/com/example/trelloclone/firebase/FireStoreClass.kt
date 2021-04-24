@@ -2,10 +2,8 @@ package com.example.trelloclone.firebase
 
 import android.app.Activity
 import android.util.Log
-import com.example.trelloclone.activities.MainActivity
-import com.example.trelloclone.activities.MyProfileActivity
-import com.example.trelloclone.activities.SignInActivity
-import com.example.trelloclone.activities.SignUpActivity
+import android.widget.Toast
+import com.example.trelloclone.activities.*
 import com.example.trelloclone.models.User
 import com.example.trelloclone.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
@@ -38,6 +36,26 @@ class FireStoreClass {
                     "Error writing document",
                     e
                 )
+            }
+    }
+    fun updateUserProfileData(activity: MyProfileActivity,userHaspMap:HashMap<String,Any>){
+        mFireStore.collection(Constants.USERS)
+            .document(getCurrentUserID()).update(userHaspMap).addOnSuccessListener {
+           Toast.makeText(activity, "profile data updated", Toast.LENGTH_SHORT).show()
+                activity.profileUpdateSuccess()
+
+
+            }.addOnFailureListener {
+                e->
+                activity.hideProgressDialog()
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while creating a board",
+                    e
+                )
+                Toast.makeText(activity, "error while updating data", Toast.LENGTH_SHORT).show()
+
+
             }
     }
 
