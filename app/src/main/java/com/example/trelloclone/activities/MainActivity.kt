@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.trelloclone.R
 import com.example.trelloclone.firebase.FireStoreClass
 import com.example.trelloclone.models.User
+import com.example.trelloclone.utils.Constants
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
@@ -21,8 +22,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     companion object {
         const val MY_PROFILE_REQUEST_CODE: Int = 11
-
     }
+
+    private lateinit var mUsername: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +34,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         FireStoreClass().loadUserData(this)
 
         btnFab.setOnClickListener {
-            startActivity(Intent(this, CreateBoardActivity::class.java))
+            val intent = Intent(this, CreateBoardActivity::class.java)
+            intent.putExtra(Constants.NAME, mUsername)
+            startActivity(intent)
         }
 
     }
@@ -68,6 +72,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     fun updateNavigationUserDetails(user: User) {
+        mUsername = user.name
+
         Glide.with(this@MainActivity).load(user.image).centerCrop()
             .placeholder(R.drawable.ic_user_place_holder).into(nav_user_image)
 

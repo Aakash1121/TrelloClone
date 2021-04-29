@@ -4,11 +4,13 @@ import android.app.Activity
 import android.util.Log
 import android.widget.Toast
 import com.example.trelloclone.activities.*
+import com.example.trelloclone.models.Board
 import com.example.trelloclone.models.User
 import com.example.trelloclone.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+
 class FireStoreClass {
 
     // Create a instance of Firebase Firestore
@@ -27,6 +29,8 @@ class FireStoreClass {
             .addOnSuccessListener {
 
                 // Here call a function of base activity for transferring the result to it.
+                Log.e(activity.javaClass.simpleName, "User Created Successfully.")
+                Toast.makeText(activity, "User Created Successfully", Toast.LENGTH_SHORT).show()
                 activity.userRegisteredSuccess()
             }
             .addOnFailureListener { e ->
@@ -38,15 +42,35 @@ class FireStoreClass {
                 )
             }
     }
-    fun updateUserProfileData(activity: MyProfileActivity,userHaspMap:HashMap<String,Any>){
+
+    fun createBoard(activity: CreateBoardActivity, board: Board) {
+        mFireStore.collection(Constants.BOARDS).document()
+            // Here the boardInfo are Field and the SetOption is set to merge. It is for if we wants to merge
+            .set(board, SetOptions.merge())
+            .addOnSuccessListener {
+                // Here call a function of base activity for transferring the result to it.
+                Log.e(activity.javaClass.simpleName, "Board Created Successfully.")
+                Toast.makeText(activity, "Board Created Successfully", Toast.LENGTH_SHORT).show()
+                activity.boardCreateSuccessfully()
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error writing document for board",
+                    e
+                )
+            }
+    }
+
+    fun updateUserProfileData(activity: MyProfileActivity, userHaspMap: HashMap<String, Any>) {
         mFireStore.collection(Constants.USERS)
             .document(getCurrentUserID()).update(userHaspMap).addOnSuccessListener {
-           Toast.makeText(activity, "profile data updated", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "profile data updated", Toast.LENGTH_SHORT).show()
                 activity.profileUpdateSuccess()
 
 
-            }.addOnFailureListener {
-                e->
+            }.addOnFailureListener { e ->
                 activity.hideProgressDialog()
                 Log.e(
                     activity.javaClass.simpleName,
@@ -87,7 +111,7 @@ class FireStoreClass {
                     is MainActivity -> {
                         activity.updateNavigationUserDetails(loggedInUser)
                     }
-                    is MyProfileActivity->{
+                    is MyProfileActivity -> {
                         activity.setUserDataInUI(loggedInUser)
                     }
                     // END
