@@ -63,6 +63,28 @@ class FireStoreClass {
             }
     }
 
+    fun getBoardList(activity: MainActivity) {
+        mFireStore.collection(Constants.BOARDS)
+            .whereArrayContains(Constants.ASSIGNED_TO, getCurrentUserID()).get()
+            .addOnSuccessListener { document ->
+                Log.i(activity.javaClass.simpleName, document.documents.toString())
+                val boardsList: ArrayList<Board> = ArrayList()
+                for (i in document) {
+                    val board = i.toObject(Board::class.java)!!
+                    board.documentId = i.id
+                    boardsList.add(board)
+                }
+                activity.populateBoardListToUI(boardsList)
+            }.addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while getting a board document",
+                    e
+                )
+            }
+    }
+
     fun updateUserProfileData(activity: MyProfileActivity, userHaspMap: HashMap<String, Any>) {
         mFireStore.collection(Constants.USERS)
             .document(getCurrentUserID()).update(userHaspMap).addOnSuccessListener {
@@ -83,12 +105,13 @@ class FireStoreClass {
             }
     }
 
+
     // TODO (Step 1: We can use the same function to get the current logged in user details. As we need to modify only few things here.)
     // START
     /**
      * A function to SignIn using firebase and get the user details from Firestore Database.
      */
-    fun loadUserData(activity: Activity) {
+    fun loadUserData(activity: Activity, readsBoardsList: Boolean = false) {
 
         // Here we pass the collection name from which we wants the data.
         mFireStore.collection(Constants.USERS)
@@ -109,7 +132,7 @@ class FireStoreClass {
                         activity.signInSuccess(loggedInUser)
                     }
                     is MainActivity -> {
-                        activity.updateNavigationUserDetails(loggedInUser)
+                        activity.updateNavigationUserDetails(loggedInUser, readsBoardsList)
                     }
                     is MyProfileActivity -> {
                         activity.setUserDataInUI(loggedInUser)

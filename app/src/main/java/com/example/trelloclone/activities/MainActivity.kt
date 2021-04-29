@@ -5,17 +5,22 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.trelloclone.R
+import com.example.trelloclone.adapter.BoardItemsAdapter
 import com.example.trelloclone.firebase.FireStoreClass
+import com.example.trelloclone.models.Board
 import com.example.trelloclone.models.User
 import com.example.trelloclone.utils.Constants
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.main_content.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -31,7 +36,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setContentView(R.layout.activity_main)
         setupActionBar()
         nav_view.setNavigationItemSelectedListener(this)
-        FireStoreClass().loadUserData(this)
+        FireStoreClass().loadUserData(this, true)
 
         btnFab.setOnClickListener {
             val intent = Intent(this, CreateBoardActivity::class.java)
@@ -39,6 +44,23 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             startActivity(intent)
         }
 
+    }
+
+    fun populateBoardListToUI(boardList: ArrayList<Board>) {
+        hideProgressDialog()
+        if (boardList.size > 0) {
+            rv_boards_list.visibility = View.VISIBLE
+            tv_no_boards_available.visibility = View.GONE
+
+            rv_boards_list.layoutManager = LinearLayoutManager(this)
+            rv_boards_list.setHasFixedSize(true)
+
+            val adapter = BoardItemsAdapter(this, boardList)
+            rv_boards_list.adapter = adapter
+        } else {
+            rv_boards_list.visibility = View.GONE
+            tv_no_boards_available.visibility = View.VISIBLE
+        }
     }
 
     private fun setupActionBar() {
@@ -71,13 +93,18 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
-    fun updateNavigationUserDetails(user: User) {
+    fun updateNavigationUserDetails(user: User, readBoardList: Boolean) {
         mUsername = user.name
 
         Glide.with(this@MainActivity).load(user.image).centerCrop()
             .placeholder(R.drawable.ic_user_place_holder).into(nav_user_image)
 
         tv_username.text = user.name
+
+        if (readBoardList) {
+            showProgressDialog(resources.getString(R.string.please_wait))
+            FireStoreClass().getBoardList(this@MainActivity)
+        }
 
     }
 
