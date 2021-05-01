@@ -179,4 +179,23 @@ class FireStoreClass {
         return currentUserID
 
     }
+
+    fun getBoardDetails(activity: TaskListActivity, documentId: String) {
+        mFireStore.collection(Constants.BOARDS)
+            .document(documentId).get().addOnSuccessListener { document ->
+                Log.i(activity.javaClass.simpleName, document.toString())
+
+                //get board details
+                activity.boardDetails(document.toObject(Board::class.java)!!)
+
+
+            }.addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while getting a board document",
+                    e
+                )
+            }
+    }
 }
