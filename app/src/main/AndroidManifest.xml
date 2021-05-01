@@ -14,9 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TrelloClone">
         <activity
+            android:name=".activities.TaskListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Design.Light.NoActionBar"></activity>
+        <activity
             android:name=".activities.CreateBoardActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Design.Light.NoActionBar"/>
+            android:theme="@style/Theme.Design.Light.NoActionBar" />
         <activity
             android:name=".activities.MyProfileActivity"
             android:screenOrientation="portrait"

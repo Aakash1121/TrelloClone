@@ -27,6 +27,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     companion object {
         const val MY_PROFILE_REQUEST_CODE: Int = 11
+        const val CREATE_BOARD_REQUEST_CODE: Int = 12
     }
 
     private lateinit var mUsername: String
@@ -41,7 +42,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         btnFab.setOnClickListener {
             val intent = Intent(this, CreateBoardActivity::class.java)
             intent.putExtra(Constants.NAME, mUsername)
-            startActivity(intent)
+            startActivityForResult(intent, CREATE_BOARD_REQUEST_CODE)
         }
 
     }
@@ -57,6 +58,15 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
             val adapter = BoardItemsAdapter(this, boardList)
             rv_boards_list.adapter = adapter
+
+            adapter.setOnClickListener(object : BoardItemsAdapter.OnCLickListener {
+                override fun onClick(position: Int, model: Board) {
+                    startActivity(Intent(this@MainActivity, TaskListActivity::class.java))
+                }
+
+            })
+
+
         } else {
             rv_boards_list.visibility = View.GONE
             tv_no_boards_available.visibility = View.VISIBLE
@@ -112,6 +122,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == MY_PROFILE_REQUEST_CODE) {
             FireStoreClass().loadUserData(this)
+        } else if (resultCode == Activity.RESULT_OK && requestCode == CREATE_BOARD_REQUEST_CODE) {
+            FireStoreClass().getBoardList(this)
         } else {
             Log.e("Cancelled", "Cancelled")
         }
