@@ -51,7 +51,7 @@ class FireStoreClass {
                 // Here call a function of base activity for transferring the result to it.
                 Log.e(activity.javaClass.simpleName, "Board Created Successfully.")
                 Toast.makeText(activity, "Board Created Successfully", Toast.LENGTH_SHORT).show()
-                activity.boardCreateSuccessfully()
+                activity.boardCreatedSuccessfully()
             }
             .addOnFailureListener { e ->
                 activity.hideProgressDialog()
@@ -74,7 +74,7 @@ class FireStoreClass {
                     board.documentId = i.id
                     boardsList.add(board)
                 }
-                activity.populateBoardListToUI(boardsList)
+                activity.populateBoardsListToUI(boardsList)
             }.addOnFailureListener { e ->
                 activity.hideProgressDialog()
                 Log.e(

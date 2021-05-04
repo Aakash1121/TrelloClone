@@ -12,7 +12,7 @@
         android:theme="@style/Apptheme.AppBarOverLay">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_task_activity"
+            android:id="@+id/toolbar_task_list_activity"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"

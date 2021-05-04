@@ -10,43 +10,88 @@ import com.example.trelloclone.R
 import com.example.trelloclone.models.Board
 import kotlinx.android.synthetic.main.item_board.view.*
 
-open class BoardItemsAdapter(private val context: Context, private var list: ArrayList<Board>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var onCLickListener: OnCLickListener? = null
+open class BoardItemsAdapter(
+    private val context: Context,
+    private var list: ArrayList<Board>
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    private var onClickListener: OnClickListener? = null
+
+    /**
+     * Inflates the item views which is designed in xml layout file
+     *
+     * create a new
+     * {@link ViewHolder} and initializes some private fields to be used by RecyclerView.
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+
         return MyViewHolder(
-            LayoutInflater.from(context).inflate(R.layout.item_board, parent, false)
+            LayoutInflater.from(context).inflate(
+                R.layout.item_board,
+                parent,
+                false
+            )
         )
     }
 
+    /**
+     * Binds each item in the ArrayList to a view
+     *
+     * Called when RecyclerView needs a new {@link ViewHolder} of the given type to represent
+     * an item.
+     *
+     * This new ViewHolder should be constructed with a new View that can represent the items
+     * of the given type. You can either create a new View manually or inflate it from an XML
+     * layout file.
+     */
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val model = list[position]
+
         if (holder is MyViewHolder) {
-            Glide.with(context).load(model.image).centerCrop()
-                .placeholder(R.drawable.ic_board_place_holder).into(holder.itemView.iv_board_image)
+
+            Glide
+                .with(context)
+                .load(model.image)
+                .centerCrop()
+                .placeholder(R.drawable.ic_board_place_holder)
+                .into(holder.itemView.iv_board_image)
 
             holder.itemView.tv_board_name.text = model.name
-            holder.itemView.tv_board_created_by.text = "Created by: ${model.createdBy}"
+            holder.itemView.tv_board_created_by.text = "Created By : ${model.createdBy}"
 
             holder.itemView.setOnClickListener {
-                onCLickListener!!.onClick(position, model)
+
+                if (onClickListener != null) {
+                    onClickListener!!.onClick(position, model)
+                }
             }
         }
     }
 
-    interface OnCLickListener {
-        fun onClick(position: Int, model: Board)
-    }
-
+    /**
+     * Gets the number of items in the list
+     */
     override fun getItemCount(): Int {
         return list.size
     }
 
-    fun setOnClickListener(onCLickListener: OnCLickListener) {
-        this.onCLickListener=onCLickListener
+    /**
+     * A function for OnClickListener where the Interface is the expected parameter..
+     */
+    fun setOnClickListener(onClickListener: OnClickListener) {
+        this.onClickListener = onClickListener
     }
 
+    /**
+     * An interface for onclick items.
+     */
+    interface OnClickListener {
+        fun onClick(position: Int, model: Board)
+    }
+
+    /**
+     * A ViewHolder describes an item view and metadata about its place within the RecyclerView.
+     */
     private class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)
 }
