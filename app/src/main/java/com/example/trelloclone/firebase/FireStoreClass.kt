@@ -30,6 +30,8 @@ class FireStoreClass {
 
                 // Here call a function of base activity for transferring the result to it.
                 Log.e(activity.javaClass.simpleName, "User Created Successfully.")
+
+
                 Toast.makeText(activity, "User Created Successfully", Toast.LENGTH_SHORT).show()
                 activity.userRegisteredSuccess()
             }
@@ -186,7 +188,9 @@ class FireStoreClass {
                 Log.i(activity.javaClass.simpleName, document.toString())
 
                 //get board details
-                activity.boardDetails(document.toObject(Board::class.java)!!)
+                val board = document.toObject(Board::class.java)!!
+                board.documentId = document.id
+                activity.boardDetails(board)
 
 
             }.addOnFailureListener { e ->
@@ -196,6 +200,22 @@ class FireStoreClass {
                     "Error while getting a board document",
                     e
                 )
+            }
+    }
+
+    fun addUpdateTaskList(activity: TaskListActivity, board: Board) {
+        val taskListHaspMap = HashMap<String, Any>()
+        taskListHaspMap[Constants.TASK_LIST] = board.taskList
+
+        mFireStore.collection(Constants.BOARDS)
+            .document(board.documentId).update(taskListHaspMap)
+            .addOnSuccessListener {
+                Toast.makeText(activity, "TaskList updated Successfully", Toast.LENGTH_SHORT).show()
+                activity.addUpdateTaskListSuccess()
+            }
+            .addOnFailureListener {
+                activity.hideProgressDialog()
+                Toast.makeText(activity, "Failed to create task", Toast.LENGTH_SHORT).show()
             }
     }
 }
