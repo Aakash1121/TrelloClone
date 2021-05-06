@@ -4,8 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trelloclone.R
-import com.example.trelloclone.adapter.TaskListItemsAdapter
-
+import com.example.trelloclone.TaskListItemsAdapter
 import com.example.trelloclone.firebase.FireStoreClass
 import com.example.trelloclone.models.Board
 import com.example.trelloclone.models.Task
@@ -119,4 +118,25 @@ class TaskListActivity : BaseActivity() {
         showProgressDialog(resources.getString(R.string.please_wait))
         FireStoreClass().getBoardDetails(this@TaskListActivity, mBoardDetails.documentId)
     }
+
+    fun updateTaskList(position: Int, listname: String, model: Task) {
+        val task = Task(listname, model.createdBy)
+        mBoardDetails.taskList[position] = task
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size - 1)
+
+        showProgressDialog(resources.getString(R.string.please_wait))
+
+        FireStoreClass().addUpdateTaskList(this@TaskListActivity, mBoardDetails)
+    }
+
+    fun deleteTaskList(position: Int) {
+        mBoardDetails.taskList.removeAt(position)
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size - 1)
+
+        showProgressDialog(resources.getString(R.string.please_wait))
+
+        FireStoreClass().addUpdateTaskList(this@TaskListActivity, mBoardDetails)
+    }
+
+
 }
