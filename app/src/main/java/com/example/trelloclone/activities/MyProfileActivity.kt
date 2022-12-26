@@ -147,7 +147,8 @@ class MyProfileActivity : BaseActivity() {
         showProgressDialog(resources.getString(R.string.please_wait))
         if (mSelectedImageFileUri != null) {
             val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
-                "USER_IMAGE" + System.currentTimeMillis() + "." + Constants.getFileExtension(this,                    mSelectedImageFileUri
+                "USER_IMAGE" + System.currentTimeMillis() + "." + Constants.getFileExtension(
+                    this, mSelectedImageFileUri
                 )
             )
             sRef.putFile(mSelectedImageFileUri!!).addOnSuccessListener { taskSnapShot ->

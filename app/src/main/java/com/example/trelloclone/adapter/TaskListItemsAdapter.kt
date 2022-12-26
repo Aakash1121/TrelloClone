@@ -89,8 +89,7 @@ open class TaskListItemsAdapter(
                 }
             }
 
-            // TODO (Step 1: Add a click event for iv_edit_list for showing the editable view.)
-            // START
+
             holder.itemView.ib_edit_list_name.setOnClickListener {
 
                 holder.itemView.et_edit_task_list_name.setText(model.title) // Set the existing title
@@ -99,16 +98,14 @@ open class TaskListItemsAdapter(
             }
             // END
 
-            // TODO (Step 2: Add a click event for iv_close_editable_view for hiding the editable view.)
-            // START
+
             holder.itemView.ib_close_editable_view.setOnClickListener {
                 holder.itemView.ll_title_view.visibility = View.VISIBLE
                 holder.itemView.cv_edit_task_list_name.visibility = View.GONE
             }
             // END
 
-            // TODO (Step 4: Add a click event for iv_edit_list for showing thr editable view.)
-            // START
+
             holder.itemView.ib_done_edit_list_name.setOnClickListener {
                 val listName = holder.itemView.et_edit_task_list_name.text.toString()
 
@@ -120,10 +117,7 @@ open class TaskListItemsAdapter(
                     Toast.makeText(context, "Please Enter List Name.", Toast.LENGTH_SHORT).show()
                 }
             }
-            // END
 
-            // TODO (Step 7: Add a click event for ib_delete_list for deleting the task list.)
-            // START
             holder.itemView.ib_delete_list.setOnClickListener {
 
                 alertDialogForDeleteList(position, model.title)
@@ -139,9 +133,6 @@ open class TaskListItemsAdapter(
         return list.size
     }
 
-    /**
-     * A function to get density pixel from pixel
-     */
     private fun Int.toDp(): Int =
         (this / Resources.getSystem().displayMetrics.density).toInt()
 
@@ -151,11 +142,7 @@ open class TaskListItemsAdapter(
     private fun Int.toPx(): Int =
         (this * Resources.getSystem().displayMetrics.density).toInt()
 
-    // TODO (Step 6: Create a function to show an alert dialog for deleting the task list.)
-    // START
-    /**
-     * Method is used to show the Alert Dialog for deleting the task list.
-     */
+
     private fun alertDialogForDeleteList(position: Int, title: String) {
         val builder = AlertDialog.Builder(context)
         //set title for alert dialog

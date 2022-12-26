@@ -13,9 +13,7 @@ import kotlinx.android.synthetic.main.activity_task_list.*
 
 class TaskListActivity : BaseActivity() {
 
-    // TODO (Step 2: Create a global variable for Board Details.)
-    // START
-    // A global variable for Board Details.
+
     private lateinit var mBoardDetails: Board
     // END
 
@@ -50,22 +48,13 @@ class TaskListActivity : BaseActivity() {
         toolbar_task_list_activity.setNavigationOnClickListener { onBackPressed() }
     }
 
-    /**
-     * A function to get the result of Board Detail.
-     */
     fun boardDetails(board: Board) {
 
-        // TODO (Step 3: Initialize and Assign the value to the global variable for Board Details.
-        //  After replace the parameter variable with global so from onwards the global variable will be used.)
-        // START
         mBoardDetails = board
         // END
 
         hideProgressDialog()
 
-        // TODO (Step 4: Remove the parameter and add the title from global variable in the setupActionBar function.)
-        // START
-        // Call the function to setup action bar.
         setupActionBar()
         // END
 
@@ -82,11 +71,7 @@ class TaskListActivity : BaseActivity() {
         rvTasklist.adapter = adapter // Attach the adapter to the recyclerView.
     }
 
-    // TODO (Step 10: Create a function to get the task list name from the adapter class which we will be using to create a new task list in the database.)
-    // START
-    /**
-     * A function to get the task list name from the adapter class which we will be using to create a new task list in the database.
-     */
+
     fun createTaskList(taskListName: String) {
 
         Log.e("Task List Name", taskListName)
@@ -102,13 +87,7 @@ class TaskListActivity : BaseActivity() {
 
         FireStoreClass().addUpdateTaskList(this@TaskListActivity, mBoardDetails)
     }
-    // END
 
-    // TODO (Step 7: Create a function to get the result of add or updating the task list.)
-    // START
-    /**
-     * A function to get the result of add or updating the task list.
-     */
     fun addUpdateTaskListSuccess() {
 
         hideProgressDialog()
